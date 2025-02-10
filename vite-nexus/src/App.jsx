@@ -9,14 +9,16 @@ import WeatherComponent from "./components/Weather";
 
 function App() {
   return (
-    <>
-      <TopBar />
-      <Container className="text-center d-flex justify-content-center">
-        <MyCard />
-      </Container>
-      <WeatherComponent />
+    <div>
+      <div className="d-flex flex-column min-vh-100">
+        <TopBar />
+        <Container className="text-center d-flex justify-content-center">
+          <MyCard />
+        </Container>
+        <WeatherComponent />
+      </div>
       <Footer />
-    </>
+    </div>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Container, Form, Button, Alert, Card } from "react-bootstrap";
 
 const WeatherComponent = () => {
@@ -51,7 +51,7 @@ const WeatherComponent = () => {
         <Form.Group className="mb-3" controlId="cityInput">
           <Form.Control
             type="text"
-            placeholder="Inserisci il nome della città..."
+            placeholder="Inserisci la città..."
             value={city}
             onChange={(e) => setCity(e.target.value)}
           />
@@ -67,12 +67,10 @@ const WeatherComponent = () => {
         <Card>
           <Card.Body>
             <Card.Title>Meteo a {city}</Card.Title>
-            <Card.Text>
-              <p>🌡️ Temperatura: {Math.round(weatherData.data.values.temperature)}°C</p>
-              <p>💧 Umidità: {Math.round(weatherData.data.values.humidity)}%</p>
-              <p>🌤️ Copertura nuvolosa: {Math.round(weatherData.data.values.cloudCover)}%</p>
-              <p>💨 Velocità del vento: {Math.round(weatherData.data.values.windSpeed)} km/h</p>
-            </Card.Text>
+            <Card.Text>🌡️ Temperatura: {Math.round(weatherData.data.values.temperature)}°C</Card.Text>
+            <Card.Text>💧 Umidità: {Math.round(weatherData.data.values.humidity)}%</Card.Text>
+            <Card.Text> 🌤️ Copertura nuvolosa: {Math.round(weatherData.data.values.cloudCover)}%</Card.Text>
+            <Card.Text> 💨 Velocità del vento: {Math.round(weatherData.data.values.windSpeed)} km/h</Card.Text>
           </Card.Body>
         </Card>
       )}

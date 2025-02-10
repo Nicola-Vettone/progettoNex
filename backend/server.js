@@ -21,7 +21,7 @@ app.get("/users", async (req, res) => {
 });
 
 // POST - Crea un nuovo utente
-app.post("/api/users", async (req, res) => {
+app.post("/post/users", async (req, res) => {
   const user = new User({
     name: req.body.name,
     lastName: req.body.lastName,
@@ -37,7 +37,32 @@ app.post("/api/users", async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+// PUT - modifica i dati di un utente
+app.put("/put/users/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("ID ricevuto:", id);
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      {
+        name: req.body.name,
+        lastName: req.body.lastName,
+        age: req.body.age,
+        email: req.body.email,
+        hobby: req.body.hobby,
+      },
+      { new: true }
+    );
 
+    if (!updatedUser) {
+      return res.status(404).json({ message: "Utente non trovato" });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 // Connetti al database e avvia il server
 try {
   await connectDb();

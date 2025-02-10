@@ -1,11 +1,13 @@
-import React, { Component } from "react";
-import Card from "react-bootstrap/Card";
-import Spinner from "react-bootstrap/Spinner";
+import { Component } from "react";
+import { Card, Button, Spinner } from "react-bootstrap";
+import ModUsers from "./Mod";
 
 class MyCard extends Component {
   state = {
     users: [],
     isLoading: true,
+    selectedUser: null,
+    showModal: false,
   };
 
   componentDidMount() {
@@ -19,16 +21,34 @@ class MyCard extends Component {
         throw new Error("Errore nel recupero dei dati");
       }
       const data = await response.json();
-      this.setState({ users: data });
+      this.setState({ users: data, isLoading: false });
     } catch (error) {
       console.error("Errore nel recupero degli utenti:", error);
-    } finally {
       this.setState({ isLoading: false });
     }
   };
 
+  // Apri il mod e imposta l'utente selezionato
+  handleOpenModal = (user) => {
+    this.setState({ selectedUser: user, showModal: true });
+  };
+
+  // Chiudi il mod
+  handleCloseModal = () => {
+    this.setState({ showModal: false, selectedUser: null });
+  };
+
+  // Aggiorna l'utente dopo la modifica
+  handleSaveUser = (updatedUser) => {
+    this.setState((prevState) => ({
+      users: prevState.users.map((user) => (user._id === updatedUser._id ? updatedUser : user)),
+      showModal: false,
+      selectedUser: null,
+    }));
+  };
+
   render() {
-    const { users, isLoading } = this.state;
+    const { users, isLoading, selectedUser, showModal } = this.state;
 
     if (isLoading) {
       return (
@@ -52,11 +72,28 @@ class MyCard extends Component {
               <Card.Title>
                 {user.name} {user.lastName}
               </Card.Title>
-              <Card.Text>Età: {user.age}</Card.Text>
-              <Card.Text>Hobby: {user.hobby.join(", ")}</Card.Text>
+              <Card.Text>
+                <strong>Età:</strong> {user.age}
+              </Card.Text>
+              <Card.Text>
+                <strong>Email:</strong> {user.email}
+              </Card.Text>
+              <Card.Text>
+                <strong>Hobby:</strong> {user.hobby.join(", ")}
+              </Card.Text>
+
+              {/* Bottone per aprire il mod */}
+              <Button variant="primary" onClick={() => this.handleOpenModal(user)}>
+                Modifica
+              </Button>
             </Card.Body>
           </Card>
         ))}
+
+        {/* Modale per modificare */}
+        {selectedUser && (
+          <ModUsers user={selectedUser} show={showModal} onClose={this.handleCloseModal} onSave={this.handleSaveUser} />
+        )}
       </div>
     );
   }
